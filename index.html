@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Location Sharing</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 80px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #status {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Share Your Location</h2>
+
+  <p>
+    Please allow location access if you agree to share your current location.
+  </p>
+
+  <button onclick="shareLocation()">
+    Allow and Share Location
+  </button>
+
+  <p id="status"></p>
+
+  <script>
+    function shareLocation() {
+      const status = document.getElementById("status");
+
+      if (!navigator.geolocation) {
+        status.textContent =
+          "Your browser does not support location services.";
+        return;
+      }
+
+      status.textContent =
+        "Requesting location permission...";
+
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          const accuracy = position.coords.accuracy;
+
+          status.textContent =
+            "Location permission granted.";
+
+          console.log("Latitude:", latitude);
+          console.log("Longitude:", longitude);
+          console.log("Accuracy:", accuracy);
+        },
+
+        function(error) {
+
+          if (error.code === 1) {
+            status.textContent =
+              "Location permission was denied.";
+          } else if (error.code === 2) {
+            status.textContent =
+              "Location is unavailable.";
+          } else {
+            status.textContent =
+              "Unable to get your location.";
+          }
+        }
+      );
+    }
+  </script>
+
+</body>
+</html>
